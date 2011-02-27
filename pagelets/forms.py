@@ -14,8 +14,19 @@ class PageletForm(forms.ModelForm):
         css = {
             'all': ('css/pagelets.css',)
         }
-        js = ('wymeditor/jquery.wymeditor.js',
-              'js/pagelets.js')
+        js_wymeditor = ('wymeditor/jquery.wymeditor.js',
+	      'wymeditor/plugins/embed/jquery.wymeditor.embed.js') # fixes YouTube embed issues
+
+        # We assume CKEditor and filebrowser Django app are in these locations
+	js_ckeditor = (
+		'ckeditor/ckeditor.js',
+                'filebrowser/js/FB_CKEditor.js',
+                'ckeditor/adapters/jquery.js')
+
+        # The js/pagelets.js file is what is used to trigger the on-change events for 
+	# selecting the editors. 
+	js = js_wymeditor + ('js/pagelets.js',)
+#	js = js_wymeditor + js_ckeditor + ('js/pagelets.js',)
 
     def __init__(self, *args, **kwargs):
         self.preview = kwargs.pop('preview', False)

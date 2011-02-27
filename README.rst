@@ -24,7 +24,9 @@ Optional
    <http://jquery.com>`_
  - `WYMeditor
    <http://www.wymeditor.org/>`_ (included in pagelets media)
-
+ - `CKEditor
+   <http://www.ckeditor.org/>`_ (download from site)
+ 
 Example
 =======
 
@@ -109,6 +111,56 @@ If you are using the `contrib.sitemaps` application to generate your sitemap you
         # the sitemap
         (r'^sitemap\.xml$', 'django.contrib.sitemaps.views.sitemap', {'sitemaps': sitemaps}),
     )
+
+Using CKEditor
+==============
+
+1) If you wish to use CKEditor with this plug-in, you can define a PAGELET_CONTENT_TYPES within your settings.py file:
+
+PAGELET_CONTENT_TYPES = (
+    ('html', 'HTML'),
+    ('wymeditor', 'WYMeditor'),
+    ('ckeditor', 'CKEditor'),
+    ('textile', 'Textile')
+    )
+
+2) You'll need to install CKEditor into your MEDIA_URL dir inside the 'ckeditor/' directory.  The CKEditor
+package should include the ckeditor/ckeditor.js and ckeditor/adapters/jquery.js.
+
+3) If you're also using the Django grappelli/filebrowser app, then you also need to setup and install django-grappelli
+and django-filebrowser too.  For using grappelli/filebrowser, there are a few additional configuration tweaks that 
+must be done, including setting your ADMIN_MEDIA_PREFIX and installing any other dependencies.
+
+4)  The wymeditor/js/pagelets.js has the following instantiation:
+
+
+    if (value.toLowerCase() == 'ckeditor') {
+        // NOTE: If the django-filebrowser app is not used, then remove the filebrowserBrowseUrl.
+        // Using ckeditor() to replace a textarea does not call ckeditor/config.js, so we must
+        // specify the config explicitly.
+        content_field.ckeditor(function() { }, {width: '100%', 
+                                                filebrowserBrowseUrl: '/admin/filebrowser/browse?pop=3'
+                                               });
+    }
+
+If you're not going to use the Django filebrowser/grappelli plug-ins, remove the filebrowserBrowseUrl
+definition.   See http://docs.cksource.com/CKEditor_3.x/Developers_Guide/File_Browser_(Uploader) for
+more information.
+
+5) You'll also need to modify the forms.py to include js_wym_ckeditor too:
+
+        js_wymeditor = ('wymeditor/jquery.wymeditor.js',
+              'wymeditor/plugins/embed/jquery.wymeditor.embed.js'  # fixes YouTube embed issues
+              'js/pagelets.js') 
+
+        js_wym_ckeditor = (
+        # We assume CKEditor and filebrowser Django app are in these locations
+                'ckeditor/ckeditor.js',
+                'filebrowser/js/FB_CKEditor.js',
+                'ckeditor/adapters/jquery.js')
+
+        
+        js = js_wymeditor + js_wym_ckeditor + ('js/pagelets.js',)
 
 Extending and Customizing Pagelets
 ==================================

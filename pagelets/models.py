@@ -18,6 +18,18 @@ else:
 
 ORDER_CHOICES = [(x, x) for x in range(-10, 11)]
 
+CONTENT_TYPES = (
+    ('html', 'HTML'),
+    #    ('mediawiki', 'MediaWiki'),
+    ('markdown', 'Markdown'),
+    #    ('tinymce', 'TinyMCE'),
+    ('wymeditor', 'WYMeditor'),
+    ('textile', 'Textile'),
+    )
+
+if hasattr(settings, 'PAGELET_CONTENT_TYPES'):
+    CONTENT_TYPES = settings.PAGELET_CONTENT_TYPES
+
 try:
     settings.PAGELET_CONTENT_DEFAULT
 except AttributeError:
@@ -158,15 +170,6 @@ class Pagelet(PageletBase):
     """
     Primary model for storing pieces of static content in the database.
     """
-    
-    CONTENT_TYPES = (
-        ('html', 'HTML'),
-    #    ('mediawiki', 'MediaWiki'),
-        ('markdown', 'Markdown'),
-    #    ('tinymce', 'TinyMCE'),
-        ('wymeditor', 'WYMeditor'),
-        ('textile', 'Textile'),
-    )
     
     # whenever you need to reference a pagelet in CSS, use its slug
     slug = models.CharField(
