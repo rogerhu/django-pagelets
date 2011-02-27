@@ -17,15 +17,6 @@ function setEditor(popup) {
     disableCKEditor(content_field);
 
     if (value.toLowerCase() == 'wymeditor') {
-        var overlay = $('<div>').addClass('file-picker-overlay').overlay({
-            effect: 'apple',
-            speed: 'fast'
-        }).filePicker({
-            url: "/file-picker/images/",
-            onImageClick: function(e, insert) {
-                this.getRoot().parent().data('wym').insert(insert);
-            }
-        }).insertBefore(content_field);
         content_field.wymeditor({
             updateSelector: 'input:submit',
             updateEvent: 'click',
