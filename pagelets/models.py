@@ -223,7 +223,7 @@ class Pagelet(PageletBase):
         origin = StringOrigin('pagelet: %s' % self.slug)
         compiled = compile_string(loaded_cms, origin).render(context)
         try:
-            if self.type in ('html', 'tinymce', 'wymeditor'):
+            if self.type in ('html', 'tinymce', 'wymeditor', 'ckeditor'):
                 html = compiled
             elif self.type == "textile":
                 from textile import textile
