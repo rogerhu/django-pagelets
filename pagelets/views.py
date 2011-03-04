@@ -36,10 +36,11 @@ def create_pagelet(request, pagelet_slug=None):
             page = Page.objects.get(pk=page_id)
         except (Page.DoesNotExist, ValueError):
             pass
-    content_area = ''
     if 'content_area' in request.GET and\
        request.GET['content_area'] in [slug for slug, name in CONTENT_AREAS]:
         content_area = request.GET['content_area']
+    else: # default to a CONTENT_AREA so at least the pagelet shows up 
+        content_area = CONTENT_AREAS[0][0] if len(CONTENT_AREAS) > 0 else ''
     pagelet = None
     if pagelet_slug:
         try:
